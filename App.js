@@ -1,46 +1,26 @@
-import { StatusBar } from "expo-status-bar";
-import { useState } from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import { FOCUS_TIME_MINUTES } from "./constants";
+import Welcome from "./pages/Welcome";
+import Timer from "./pages/Timer";
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [timerCount, setTimerCount] = useState(FOCUS_TIME_MINUTES);
-  const [timerId, setTimerId] = useState(null);
-
-  function startTimer() {
-    if (!timerId) {
-      const id = setInterval(() => setTimerCount((prev) => prev - 1000), 1000);
-      setTimerId(id);
-    }
-  }
-
-  function stopTimer() {
-    if (timerId) {
-      clearInterval(timerId);
-      setTimerId(null);
-    }
-  }
-
-  const minutes = Math.floor(timerCount / 60000);
-  const seconds = Math.floor((timerCount % 60000) / 1000);
-
   return (
-    <View style={styles.container}>
-      <Text>Pomodor</Text>
-      <StatusBar style="auto" />
-      <Button title="시작!" onPress={startTimer} />
-      <Button title="중지!" onPress={stopTimer} />
-      <Text>{`${minutes}:${seconds.toString().padStart(2, "0")}`}</Text>
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Home"
+          component={Welcome}
+          options={{ title: "Home" }}
+        />
+        <Stack.Screen
+          name="Timer"
+          component={Timer}
+          options={{ title: "Pomodoro" }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
