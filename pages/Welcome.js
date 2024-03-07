@@ -108,11 +108,11 @@ const styles = StyleSheet.create({
     margin: 50,
   },
   button: {
-    backgroundColor: "#EC2D01",
     padding: 15,
+    backgroundColor: "#EC2D01",
+    borderColor: "#EC2D01",
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: "#EC2D01",
   },
   buttonText: {
     color: "#fff",
