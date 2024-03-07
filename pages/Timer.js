@@ -1,4 +1,3 @@
-import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View, Button } from "react-native";
 import { useState } from "react";
 
@@ -28,7 +27,6 @@ export default function Timer() {
   return (
     <View style={styles.container}>
       <Text>Pomodor</Text>
-      <StatusBar style="auto" />
       <Button title="시작!" onPress={startTimer} />
       <Button title="중지!" onPress={stopTimer} />
       <Text>{`${minutes}:${seconds.toString().padStart(2, "0")}`}</Text>

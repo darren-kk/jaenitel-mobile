@@ -44,11 +44,10 @@ export default function Welcome({ navigation }) {
         {toggleExplanation && (
           <View style={styles.explanation}>
             <Text style={styles.paragraph}>
-              포모도로 기법은 1980년대에 대학생 Francesco Cirillo가 개발한 시간
-              관리 방법론입니다. 하루를 정해진 시간 간격으로 쪼개 활용하는 이
-              기법의 이름은 '토마토'를 의미하는 이탈리아 단어를 따라
-              붙여졌습니다. Cirillo가 시간을 잴 때 토마토 모양 요리용 타이머를
-              사용한 데서 유래했습니다.
+              포모도로 기법은 Francesco Cirillo가 개발한 시간 관리 방법론입니다.
+              하루를 정해진 시간 간격으로 쪼개 활용하는 이 기법의 이름은
+              '토마토'를 의미하는 이탈리아 단어를 따라 붙여졌습니다. Cirillo가
+              시간을 잴 때 토마토 모양 요리용 타이머를 사용한 데서 유래했습니다.
             </Text>
             <View style={styles.listContainer}>
               {listItems.map((item, index) => (
@@ -71,7 +70,7 @@ const styles = StyleSheet.create({
   },
   container: {
     paddingHorizontal: 15,
-    paddingVertical: 50,
+    paddingVertical: 130,
     flex: 1,
     width: "100%",
     alignItems: "center",
@@ -146,7 +145,7 @@ const styles = StyleSheet.create({
   },
   explanation: {
     flex: 1,
-    padding: 5,
+    padding: 10,
     alignItems: "center",
     justifyContent: "center",
     borderWidth: 1,
