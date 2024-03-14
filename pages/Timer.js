@@ -1,7 +1,8 @@
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import Time from "../components/Time";
+import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import { useState } from "react";
 
+import Time from "../components/Time";
+import Quiz from "../components/Quiz";
 import { TIME_MINUTES } from "../constants";
 
 export default function Timer() {
@@ -21,6 +22,11 @@ export default function Timer() {
       clearInterval(timerId);
       setTimerId(null);
     }
+  }
+
+  function resetTimer() {
+    stopTimer();
+    setTimerCount(TIME_MINUTES[mode]);
   }
 
   function handleModeChange(mode) {
@@ -56,7 +62,7 @@ export default function Timer() {
             onPress={() => handleModeChange("pomodoro")}
           >
             <Text style={[styles.menuText, { color: colorByMode }]}>
-              포모도로
+              뽀모도로
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -88,16 +94,22 @@ export default function Timer() {
         {!timerId ? (
           <TouchableOpacity style={styles.button} onPress={startTimer}>
             <Text style={[styles.buttonText, { color: colorByMode }]}>
-              시작!
+              집중 시작!
             </Text>
           </TouchableOpacity>
         ) : (
           <TouchableOpacity style={styles.button} onPress={stopTimer}>
             <Text style={[styles.buttonText, { color: colorByMode }]}>
-              중지!
+              일시정지
             </Text>
           </TouchableOpacity>
         )}
+        <TouchableOpacity onPress={resetTimer}>
+          <Image
+            style={styles.resetIcon}
+            source={require("../assets/reset.png")}
+          />
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -128,8 +140,9 @@ const styles = StyleSheet.create({
   },
   menuButton: {
     width: "auto",
-    height: 20,
+    height: 25,
     paddingHorizontal: 10,
+    paddingVertical: 3,
     backgroundColor: "#fff",
     borderColor: "#fff",
     borderRadius: 8,
@@ -146,12 +159,12 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   menuText: {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: "900",
     textAlign: "center",
   },
   buttonContainer: {
-    flexDirection: "center",
+    flexDirection: "row",
   },
   button: {
     width: 200,
@@ -175,5 +188,12 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "900",
     textAlign: "center",
+  },
+  resetIcon: {
+    position: "absolute",
+    width: 50,
+    height: 50,
+    marginLeft: 15,
+    marginTop: 10,
   },
 });
