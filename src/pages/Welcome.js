@@ -32,7 +32,12 @@ export default function Welcome({ navigation }) {
         >
           <Text style={styles.toggleText}>뽀모도로란? 🍅</Text>
         </TouchableOpacity>
-        {toggleExplanation && <PomodoroDescription />}
+        {toggleExplanation && (
+          <PomodoroDescription
+            toggleExplanation={toggleExplanation}
+            setToggleExplanation={setToggleExplanation}
+          />
+        )}
       </View>
     </ScrollView>
   );
