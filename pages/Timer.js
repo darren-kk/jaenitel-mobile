@@ -1,18 +1,13 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Platform,
-} from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import Time from "../components/Time";
 import { useState } from "react";
 
-import { FOCUS_TIME_MINUTES } from "../constants";
+import { TIME_MINUTES } from "../constants";
 
 export default function Timer() {
-  const [timerCount, setTimerCount] = useState(FOCUS_TIME_MINUTES);
+  const [timerCount, setTimerCount] = useState(TIME_MINUTES.pomodoro);
   const [timerId, setTimerId] = useState(null);
+  const [mode, setMode] = useState("pomodoro");
 
   function startTimer() {
     if (!timerId) {
@@ -28,21 +23,63 @@ export default function Timer() {
     }
   }
 
+  function handleModeChange(mode) {
+    stopTimer();
+    setMode(mode);
+    setTimerCount(TIME_MINUTES[mode]);
+  }
+
   const minutes = Math.floor(timerCount / 60000);
   const seconds = Math.floor((timerCount % 60000) / 1000);
 
+  const colorByMode =
+    mode === "pomodoro"
+      ? "#EC2D01"
+      : mode === "shortBreak"
+      ? "#4E9196"
+      : "#4F7FA2";
+
   return (
     <View style={styles.container}>
-      <View style={styles.timerContainer}>
+      <View
+        style={[
+          styles.timerContainer,
+          { backgroundColor: colorByMode, borderColor: colorByMode },
+        ]}
+      >
         <View style={styles.menuContainer}>
-          <TouchableOpacity style={styles.menuButton} onPress={startTimer}>
-            <Text style={styles.menuText}>포모도로</Text>
+          <TouchableOpacity
+            style={[
+              styles.menuButton,
+              mode === "pomodoro" && styles.activeButton,
+            ]}
+            onPress={() => handleModeChange("pomodoro")}
+          >
+            <Text style={[styles.menuText, { color: colorByMode }]}>
+              포모도로
+            </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.menuButton} onPress={startTimer}>
-            <Text style={styles.menuText}>짧은 휴식</Text>
+          <TouchableOpacity
+            style={[
+              styles.menuButton,
+              mode === "shortBreak" && styles.activeButton,
+            ]}
+            onPress={() => handleModeChange("shortBreak")}
+          >
+            <Text style={[styles.menuText, { color: colorByMode }]}>
+              짧은 휴식
+            </Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.menuButton} onPress={startTimer}>
-            <Text style={styles.menuText}>긴 휴식</Text>
+          <TouchableOpacity
+            style={[
+              styles.menuButton,
+              mode === "longBreak" && styles.activeButton,
+            ]}
+            onPress={() => handleModeChange("longBreak")}
+          >
+            <Text style={[styles.menuText, { color: colorByMode }]}>
+              긴 휴식
+            </Text>
           </TouchableOpacity>
         </View>
         <Time minutes={minutes} seconds={seconds}></Time>
@@ -50,11 +87,15 @@ export default function Timer() {
       <View style={styles.buttonContainer}>
         {!timerId ? (
           <TouchableOpacity style={styles.button} onPress={startTimer}>
-            <Text style={styles.buttonText}>시작!</Text>
+            <Text style={[styles.buttonText, { color: colorByMode }]}>
+              시작!
+            </Text>
           </TouchableOpacity>
         ) : (
           <TouchableOpacity style={styles.button} onPress={stopTimer}>
-            <Text style={styles.buttonText}>중지!</Text>
+            <Text style={[styles.buttonText, { color: colorByMode }]}>
+              중지!
+            </Text>
           </TouchableOpacity>
         )}
       </View>
@@ -73,8 +114,6 @@ const styles = StyleSheet.create({
   timerContainer: {
     alignItems: "center",
     justifyContent: "space-evenly",
-    backgroundColor: "#EC2D01",
-    borderColor: "#EC2D01",
     width: 350,
     height: 250,
     padding: 15,
@@ -107,7 +146,6 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   menuText: {
-    color: "#EC2D01",
     fontSize: 16,
     fontWeight: "900",
     textAlign: "center",
@@ -134,7 +172,6 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   buttonText: {
-    color: "#EC2D01",
     fontSize: 24,
     fontWeight: "900",
     textAlign: "center",

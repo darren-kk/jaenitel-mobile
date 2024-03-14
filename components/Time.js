@@ -2,11 +2,14 @@ import React from "react";
 import { Text, View, Platform } from "react-native";
 
 const Time = ({ minutes, seconds }) => {
+  const formattedMinutes = minutes.toString().padStart(2, "0");
+  const formattedSeconds = seconds.toString().padStart(2, "0");
+
   return (
     <View style={styles.timerTextContainer}>
-      <Text style={styles.timerText}>{`${minutes}:${seconds
-        .toString()
-        .padStart(2, "0")}`}</Text>
+      <Text
+        style={styles.timerText}
+      >{`${formattedMinutes}:${formattedSeconds}`}</Text>
     </View>
   );
 };
