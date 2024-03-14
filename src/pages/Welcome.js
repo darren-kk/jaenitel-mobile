@@ -7,7 +7,7 @@ import {
   ScrollView,
 } from "react-native";
 import { useState } from "react";
-import PomodoroDescription from "../../components/PomodoroDescription";
+import PomodoroDescription from "../components/PomodoroDescription";
 
 export default function Welcome({ navigation }) {
   const [toggleExplanation, setToggleExplanation] = useState(false);
@@ -18,7 +18,7 @@ export default function Welcome({ navigation }) {
         <Text style={styles.header}>Tech-Pomodorian</Text>
         <Image
           style={styles.Timer}
-          source={require("../assets/pomodoroTimer.png")}
+          source={require("../../assets/pomodoroTimer.png")}
         />
         <TouchableOpacity
           style={styles.button}

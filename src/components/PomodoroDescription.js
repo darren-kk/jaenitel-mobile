@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import { POMODORO_METHODS } from "../constants";
+import { POMODORO_METHODS } from "../utils/constants";
 
 function PomodoroDescription() {
   return (

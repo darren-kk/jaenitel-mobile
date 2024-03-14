@@ -3,7 +3,7 @@ import { useState } from "react";
 
 import Time from "../components/Time";
 import Quiz from "../components/Quiz";
-import { TIME_MINUTES } from "../constants";
+import { TIME_MINUTES } from "../utils/constants";
 
 export default function Timer() {
   const [timerCount, setTimerCount] = useState(TIME_MINUTES.pomodoro);
@@ -108,7 +108,7 @@ export default function Timer() {
         <TouchableOpacity onPress={resetTimer}>
           <Image
             style={styles.resetIcon}
-            source={require("../assets/reset.png")}
+            source={require("../../assets/reset.png")}
           />
         </TouchableOpacity>
       </View>

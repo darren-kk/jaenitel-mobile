@@ -2,8 +2,8 @@ import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import Welcome from "./pages/Welcome";
-import Timer from "./pages/Timer";
+import Welcome from "./src/pages/Welcome";
+import Timer from "./src/pages/Timer";
 
 const Stack = createNativeStackNavigator();
 
