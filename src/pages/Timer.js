@@ -9,6 +9,7 @@ export default function Timer() {
   const [timerCount, setTimerCount] = useState(TIME_MINUTES.pomodoro);
   const [timerId, setTimerId] = useState(null);
   const [mode, setMode] = useState("pomodoro");
+  const [showQuiz, setShowQuiz] = useState(false);
 
   function startTimer() {
     if (!timerId) {
@@ -111,6 +112,10 @@ export default function Timer() {
           />
         </TouchableOpacity>
       </View>
+      <TouchableOpacity style={styles.button} onPress={() => setShowQuiz(true)}>
+        <Text style={[styles.buttonText, { color: colorByMode }]}>퀴즈뿅</Text>
+      </TouchableOpacity>
+      <Quiz showQuiz={showQuiz} setShowQuiz={setShowQuiz} />
     </View>
   );
 }

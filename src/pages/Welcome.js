@@ -7,7 +7,7 @@ import {
   ScrollView,
 } from "react-native";
 import { useState } from "react";
-import PomodoroDescription from "../components/PomodoroDescription";
+import PomodoroDescription from "../../components/PomodoroDescription";
 
 export default function Welcome({ navigation }) {
   const [toggleExplanation, setToggleExplanation] = useState(false);
