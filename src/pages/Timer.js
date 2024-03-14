@@ -115,7 +115,13 @@ export default function Timer() {
       <TouchableOpacity style={styles.button} onPress={() => setShowQuiz(true)}>
         <Text style={[styles.buttonText, { color: colorByMode }]}>퀴즈뿅</Text>
       </TouchableOpacity>
-      <Quiz showQuiz={showQuiz} setShowQuiz={setShowQuiz} />
+      {showQuiz ? (
+        <Quiz
+          showQuiz={showQuiz}
+          setShowQuiz={setShowQuiz}
+          setMode={handleModeChange}
+        />
+      ) : null}
     </View>
   );
 }

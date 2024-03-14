@@ -1,0 +1,69 @@
+{
+  "questions": [
+    {
+      "question": "HTML에서 'href' 속성이 주로 사용되는 태그는 무엇인가요?",
+      "options": ["a", "img", "ul", "h1"],
+      "answer": "a"
+    },
+    {
+      "question": "CSS에서 'box model'이란 무엇으로 구성되어 있나요?",
+      "options": [
+        "Margin, Border, Padding, Content",
+        "Padding, Margin, Border, Width",
+        "Width, Height, Margin, Padding",
+        "Border, Padding, Margin, Depth"
+      ],
+      "answer": "Margin, Border, Padding, Content"
+    },
+    {
+      "question": "React에서 'props'는 무엇을 의미하나요?",
+      "options": [
+        "A state's properties",
+        "Parent to child component's arguments",
+        "A type of React element",
+        "Private object storage"
+      ],
+      "answer": "Parent to child component's arguments"
+    },
+    {
+      "question": "웹 페이지의 'DOM'은 무엇의 약자인가요?",
+      "options": [
+        "Document Object Model",
+        "Display Object Management",
+        "Document Orientation Model",
+        "Digital Order Model"
+      ],
+      "answer": "Document Object Model"
+    },
+    {
+      "question": "JavaScript 함수 선언에서 'Arrow Function'은 주로 어떤 기호를 사용하여 표현하나요?",
+      "options": ["=>", "->", "==", "||"],
+      "answer": "=>"
+    },
+    {
+      "question": "웹 애플리케이션에서 'SPA'의 전체 명칭은 무엇인가요?",
+      "options": [
+        "Single Page Application",
+        "Server Page Application",
+        "Simple Protocol Application",
+        "Single Process Application"
+      ],
+      "answer": "Single Page Application"
+    },
+    {
+      "question": "CSS에서 'Flexbox'는 주로 무엇을 위해 사용되나요?",
+      "options": ["색상 관리", "문서 출력", "레이아웃 설계", "이미지 처리"],
+      "answer": "레이아웃 설계"
+    },
+    {
+      "question": "HTTP 요청 메소드 중, 서버에 데이터 생성을 요청하는 메소드는 무엇인가요?",
+      "options": ["GET", "POST", "DELETE", "PUT"],
+      "answer": "POST"
+    },
+    {
+      "question": "React에서 컴포넌트의 상태(state) 관리를 위해 주로 사용되는 훅(hook)은 무엇인가요?",
+      "options": ["useReducer", "useState", "useRef", "useContext"],
+      "answer": "useState"
+    }
+  ]
+}
