@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   Platform,
 } from "react-native";
+import Time from "../components/Time";
 import { useState } from "react";
 
 import { FOCUS_TIME_MINUTES } from "../constants";
@@ -35,20 +36,16 @@ export default function Timer() {
       <View style={styles.timerContainer}>
         <View style={styles.menuContainer}>
           <TouchableOpacity style={styles.menuButton} onPress={startTimer}>
-            <Text style={styles.menuText}>시작!</Text>
+            <Text style={styles.menuText}>포모도로</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.menuButton} onPress={startTimer}>
-            <Text style={styles.menuText}>시작!</Text>
+            <Text style={styles.menuText}>짧은 휴식</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.menuButton} onPress={startTimer}>
-            <Text style={styles.menuText}>시작!</Text>
+            <Text style={styles.menuText}>긴 휴식</Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.timerTextContainer}>
-          <Text style={styles.timerText}>{`${minutes}:${seconds
-            .toString()
-            .padStart(2, "0")}`}</Text>
-        </View>
+        <Time minutes={minutes} seconds={seconds}></Time>
       </View>
       <View style={styles.buttonContainer}>
         {!timerId ? (
@@ -91,8 +88,9 @@ const styles = StyleSheet.create({
     width: "100%",
   },
   menuButton: {
-    width: 70,
+    width: "auto",
     height: 20,
+    paddingHorizontal: 10,
     backgroundColor: "#fff",
     borderColor: "#fff",
     borderRadius: 8,
@@ -113,18 +111,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "900",
     textAlign: "center",
-  },
-  timerTextContainer: {
-    width: 200,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  timerText: {
-    color: "#fff",
-    fontSize: 70,
-    fontWeight: "bold",
-    textAlign: "center",
-    fontFamily: Platform.OS === "ios" ? "Menlo" : "monospace",
   },
   buttonContainer: {
     flexDirection: "center",
