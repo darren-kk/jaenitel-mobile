@@ -1,13 +1,14 @@
 import { StyleSheet, Text, View, TouchableOpacity, Modal } from "react-native";
+import { useState } from "react";
 import BouncyCheckboxGroup from "react-native-bouncy-checkbox-group";
+import WebView from "react-native-webview";
 
-import QUIZ_LIST from "../../assets/quiz.json";
-import getRandomIndex from "../utils/generateRandomIndex";
 import checkAnswer from "../utils/checkAnswer";
 
-function Quiz({ showQuiz, setShowQuiz, setMode }) {
-  const randomIndex = getRandomIndex(QUIZ_LIST.questions.length - 1);
-  const quiz = QUIZ_LIST.questions[randomIndex];
+function Quiz({ showQuiz, setShowQuiz, setMode, quiz }) {
+  const [userInput, setUserInput] = useState("");
+  const [showWebView, setShowWebView] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const options = quiz.options.map((item, index) => {
     return {
       id: index,
@@ -19,49 +20,88 @@ function Quiz({ showQuiz, setShowQuiz, setMode }) {
       },
     };
   });
-  let userInput = "";
 
   function validateUserAnswer() {
     if (checkAnswer(userInput, quiz.answer)) {
       setShowQuiz(!showQuiz);
       setMode("shortBreak");
+
       return;
     }
 
-    console.log("ㄱ검색해...");
+    setSearchQuery(quiz.question);
+    setShowWebView(true);
   }
 
+  console.log(showWebView);
+
   return (
-    <Modal
-      animationType="fade"
-      transparent={true}
-      visible={showQuiz}
-      onRequestClose={() => {
-        setShowQuiz(!showQuiz);
-      }}
-    >
-      <View style={styles.centeredView}>
-        <View style={styles.modalView}>
-          <Text style={styles.questionText}>Q. {quiz.question}</Text>
-          <BouncyCheckboxGroup
-            data={options}
-            onChange={(selectedItem) => {
-              userInput = selectedItem.text;
-            }}
-            style={{
-              flexDirection: "column",
-              width: "100%",
-            }}
-          />
-          <TouchableOpacity
-            style={[styles.button]}
-            onPress={validateUserAnswer}
-          >
-            <Text style={styles.buttonText}>제출하기!</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </Modal>
+    <>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={showQuiz}
+        onRequestClose={() => {
+          setShowQuiz(!showQuiz);
+        }}
+      >
+        {!showWebView ? (
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.questionText}>Q. {quiz.question}</Text>
+              <BouncyCheckboxGroup
+                data={options}
+                onChange={(selectedItem) => {
+                  if (selectedItem) {
+                    setUserInput(selectedItem.text);
+                  }
+                }}
+                style={{
+                  flexDirection: "column",
+                  width: "100%",
+                }}
+              />
+              <TouchableOpacity
+                style={styles.button}
+                onPress={validateUserAnswer}
+              >
+                <Text style={styles.buttonText}>제출하기!</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        ) : (
+          <View style={{ flex: 1, position: "relative" }}>
+            <WebView
+              style={{
+                width: "90%",
+                height: "70%",
+                marginHorizontal: 20,
+                marginVertical: 120,
+                borderRadius: 10,
+                shadowColor: "#000",
+                shadowOffset: {
+                  width: 0,
+                  height: 2,
+                },
+                shadowOpacity: 0.25,
+                shadowRadius: 4,
+              }}
+              source={{
+                uri: `https://www.google.com/search?q=${encodeURIComponent(
+                  searchQuery
+                )}`,
+              }}
+            />
+            <TouchableOpacity
+              style={styles.closeButton}
+              onPress={() => setShowWebView(false)}
+            >
+              <Text style={styles.buttonText}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      </Modal>
+    </>
   );
 }
 
@@ -132,6 +172,19 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
     textAlign: "center",
+  },
+  closeButton: {
+    width: 100,
+    height: 40,
+    backgroundColor: "#4E9196",
+    borderRadius: 20,
+    alignContent: "center",
+    justifyContent: "center",
+    position: "absolute",
+    zIndex: 1,
+    bottom: 50,
+    left: "50%",
+    marginLeft: -50,
   },
 });
 

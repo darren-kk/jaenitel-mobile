@@ -4,12 +4,16 @@ import { useState } from "react";
 import Time from "../components/Time";
 import Quiz from "../components/Quiz";
 import { TIME_MINUTES } from "../utils/constants";
+import QUIZ_LIST from "../../assets/quiz.json";
+import getRandomIndex from "../utils/generateRandomIndex";
 
 export default function Timer() {
   const [timerCount, setTimerCount] = useState(TIME_MINUTES.pomodoro);
   const [timerId, setTimerId] = useState(null);
   const [mode, setMode] = useState("pomodoro");
   const [showQuiz, setShowQuiz] = useState(false);
+  const randomIndex = getRandomIndex(QUIZ_LIST.questions.length - 1);
+  const quiz = QUIZ_LIST.questions[randomIndex];
 
   function startTimer() {
     if (!timerId) {
@@ -115,13 +119,14 @@ export default function Timer() {
       <TouchableOpacity style={styles.button} onPress={() => setShowQuiz(true)}>
         <Text style={[styles.buttonText, { color: colorByMode }]}>퀴즈뿅</Text>
       </TouchableOpacity>
-      {showQuiz ? (
+      {showQuiz && (
         <Quiz
           showQuiz={showQuiz}
           setShowQuiz={setShowQuiz}
           setMode={handleModeChange}
+          quiz={quiz}
         />
-      ) : null}
+      )}
     </View>
   );
 }
