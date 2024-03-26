@@ -1,7 +1,16 @@
 import { StyleSheet, Text, View, Modal, TouchableOpacity } from "react-native";
 import { POMODORO_METHODS } from "../utils/constants";
 
-function PomodoroDescription({ toggleExplanation, setToggleExplanation }) {
+function PomodoroDescription({
+  toggleExplanation,
+  setToggleExplanation,
+  navigation,
+}) {
+  function handlePress() {
+    navigation.navigate("Timer");
+    setToggleExplanation(!toggleExplanation);
+  }
+
   return (
     <Modal
       animationType="fade"
@@ -27,10 +36,7 @@ function PomodoroDescription({ toggleExplanation, setToggleExplanation }) {
               </Text>
             ))}
           </View>
-          <TouchableOpacity
-            style={styles.button}
-            onPress={() => setToggleExplanation(!toggleExplanation)}
-          >
+          <TouchableOpacity style={styles.button} onPress={handlePress}>
             <Text style={styles.buttonText}>자! 시작해볼까요?</Text>
           </TouchableOpacity>
         </View>

@@ -34,6 +34,7 @@ export default function Welcome({ navigation }) {
         </TouchableOpacity>
         {toggleExplanation && (
           <PomodoroDescription
+            navigation={navigation}
             toggleExplanation={toggleExplanation}
             setToggleExplanation={setToggleExplanation}
           />
