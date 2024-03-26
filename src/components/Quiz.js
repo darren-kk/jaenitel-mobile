@@ -1,6 +1,10 @@
 import { StyleSheet, Text, View, TouchableOpacity, Modal } from "react-native";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import BouncyCheckboxGroup from "react-native-bouncy-checkbox-group";
+import {
+  PanGestureHandler,
+  GestureHandlerRootView,
+} from "react-native-gesture-handler";
 import WebView from "react-native-webview";
 
 import checkAnswer from "../utils/checkAnswer";
@@ -20,6 +24,17 @@ function Quiz({ showQuiz, setShowQuiz, setMode, quiz }) {
       },
     };
   });
+
+  const [canGoBack, setCanGoBack] = useState(false);
+  const webViewRef = useRef(null);
+
+  function onSwipe({ nativeEvent }) {
+    if (nativeEvent.translationX > 15 && canGoBack) {
+      webViewRef.current.goBack();
+    } else if (nativeEvent.translationX < -15) {
+      webViewRef.current.goForward();
+    }
+  }
 
   function validateUserAnswer() {
     if (checkAnswer(userInput, quiz.answer)) {
@@ -70,35 +85,43 @@ function Quiz({ showQuiz, setShowQuiz, setMode, quiz }) {
             </View>
           </View>
         ) : (
-          <View style={{ flex: 1, position: "relative" }}>
-            <WebView
-              style={{
-                width: "90%",
-                height: "70%",
-                marginHorizontal: 20,
-                marginVertical: 120,
-                borderRadius: 10,
-                shadowColor: "#000",
-                shadowOffset: {
-                  width: 0,
-                  height: 2,
-                },
-                shadowOpacity: 0.25,
-                shadowRadius: 4,
-              }}
-              source={{
-                uri: `https://www.google.com/search?q=${encodeURIComponent(
-                  searchQuery
-                )}`,
-              }}
-            />
-            <TouchableOpacity
-              style={styles.closeButton}
-              onPress={() => setShowWebView(false)}
-            >
-              <Text style={styles.buttonText}>Close</Text>
-            </TouchableOpacity>
-          </View>
+          <GestureHandlerRootView style={{ flex: 1, position: "relative" }}>
+            <PanGestureHandler onGestureEvent={onSwipe}>
+              <View style={{ flex: 1, position: "relative" }}>
+                <WebView
+                  ref={webViewRef}
+                  onNavigationStateChange={(navState) => {
+                    setCanGoBack(navState.canGoBack);
+                  }}
+                  style={{
+                    width: "90%",
+                    height: "70%",
+                    marginHorizontal: 20,
+                    marginVertical: 120,
+                    borderRadius: 10,
+                    shadowColor: "#000",
+                    shadowOffset: {
+                      width: 0,
+                      height: 2,
+                    },
+                    shadowOpacity: 0.25,
+                    shadowRadius: 4,
+                  }}
+                  source={{
+                    uri: `https://www.google.com/search?q=${encodeURIComponent(
+                      searchQuery
+                    )}`,
+                  }}
+                />
+                <TouchableOpacity
+                  style={styles.closeButton}
+                  onPress={() => setShowWebView(false)}
+                >
+                  <Text style={styles.buttonText}>Close</Text>
+                </TouchableOpacity>
+              </View>
+            </PanGestureHandler>
+          </GestureHandlerRootView>
         )}
       </Modal>
     </>
