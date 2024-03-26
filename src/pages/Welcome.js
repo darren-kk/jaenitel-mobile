@@ -13,42 +13,38 @@ export default function Welcome({ navigation }) {
   const [toggleExplanation, setToggleExplanation] = useState(false);
 
   return (
-    <ScrollView style={styles.scrollView}>
-      <View style={styles.container}>
-        <Text style={styles.header}>Tech-Pomodorian</Text>
-        <Image
-          style={styles.Timer}
-          source={require("../../assets/pomodoroTimer.png")}
+    <View style={styles.container}>
+      <Text style={styles.header}>Tech-Pomodorian</Text>
+      <Image
+        style={styles.Timer}
+        source={require("../../assets/pomodoroTimer.png")}
+      />
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate("Timer")}
+      >
+        <Text style={styles.buttonText}>뽀모도로 시작하기</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.toggle}
+        onPress={() => setToggleExplanation(!toggleExplanation)}
+      >
+        <Text style={styles.toggleText}>뽀모도로란? 🍅</Text>
+      </TouchableOpacity>
+      {toggleExplanation && (
+        <PomodoroDescription
+          navigation={navigation}
+          toggleExplanation={toggleExplanation}
+          setToggleExplanation={setToggleExplanation}
         />
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => navigation.navigate("Timer")}
-        >
-          <Text style={styles.buttonText}>뽀모도로 시작하기</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.toggle}
-          onPress={() => setToggleExplanation(!toggleExplanation)}
-        >
-          <Text style={styles.toggleText}>뽀모도로란? 🍅</Text>
-        </TouchableOpacity>
-        {toggleExplanation && (
-          <PomodoroDescription
-            navigation={navigation}
-            toggleExplanation={toggleExplanation}
-            setToggleExplanation={setToggleExplanation}
-          />
-        )}
-      </View>
-    </ScrollView>
+      )}
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: "#A1CBA1",
-  },
   container: {
+    backgroundColor: "#A1CBA1",
     paddingHorizontal: 15,
     paddingVertical: 130,
     flex: 1,

@@ -33,8 +33,6 @@ function Quiz({ showQuiz, setShowQuiz, setMode, quiz }) {
     setShowWebView(true);
   }
 
-  console.log(showWebView);
-
   return (
     <>
       <Modal
