@@ -1,11 +1,4 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Image,
-  ScrollView,
-} from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import { useState } from "react";
 import PomodoroDescription from "../components/PomodoroDescription";
 
@@ -46,7 +39,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "#A1CBA1",
     paddingHorizontal: 15,
-    paddingVertical: 130,
+    paddingVertical: 200,
     flex: 1,
     width: "100%",
     alignItems: "center",
