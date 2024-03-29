@@ -6,7 +6,7 @@ import checkAnswer from "../utils/checkAnswer";
 
 function QuizLists({ quiz, updateQuiz }) {
   const [userInput, setUserInput] = useState("");
-  const options = quiz.options.map((item, index) => {
+  const options = quiz?.options?.map((item, index) => {
     return {
       id: index,
       text: item,
@@ -19,7 +19,7 @@ function QuizLists({ quiz, updateQuiz }) {
   });
 
   function validateUserAnswer() {
-    if (checkAnswer(userInput, quiz.answer)) {
+    if (checkAnswer(userInput, quiz.answwer)) {
       updateQuiz();
 
       return;

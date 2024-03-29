@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   View,
   TouchableOpacity,
@@ -12,15 +12,47 @@ import {
   State,
 } from "react-native-gesture-handler";
 import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import QuizLists from "../components/QuizLists";
 import QuizStatusbar from "../components/QuizStatusbar";
-import QUIZ_LIST from "../../assets/quiz.json";
+import AddQuiz from "../components/AddQuiz";
 
 export default function Quizs() {
+  const [quizzes, setQuizzes] = useState([]);
   const [quizIndex, setQuizIndex] = useState(0);
   const [showSwipeIndicators, setShowSwipeIndicators] = useState(true);
+  const [showAddQuiz, setShowAddQuiz] = useState(false);
   const fadeAnim = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    const loadQuizzes = async () => {
+      try {
+        const quizzesStr = await AsyncStorage.getItem("quizzes");
+        console.log(quizzesStr, "!@#!@$!@$!@$!@");
+        const loadedQuizzes = quizzesStr ? JSON.parse(quizzesStr) : [];
+        setQuizzes(loadedQuizzes);
+        if (loadedQuizzes.length > 0 && quizIndex >= loadedQuizzes.length) {
+          setQuizIndex(0);
+        }
+      } catch (error) {
+        console.error("Failed to load quizzes from storage", error);
+      }
+    };
+
+    loadQuizzes();
+  }, [showAddQuiz]);
+
+  const addNewQuiz = async (newQuiz) => {
+    const updatedQuizzes = [...quizzes, newQuiz];
+    try {
+      await AsyncStorage.setItem("quizzes", JSON.stringify(updatedQuizzes));
+      setQuizzes(updatedQuizzes);
+      setShowAddQuiz(false);
+    } catch (error) {
+      console.error("Failed to save the new quiz", error);
+    }
+  };
 
   Animated.timing(fadeAnim, {
     toValue: 0,
@@ -33,7 +65,7 @@ export default function Quizs() {
   });
 
   const moveToNextQuiz = () => {
-    if (quizIndex < QUIZ_LIST.questions.length - 1) {
+    if (quizIndex < quizzes.length - 1) {
       setQuizIndex(quizIndex + 1);
     }
   };
@@ -44,8 +76,9 @@ export default function Quizs() {
     }
   };
 
-  const addNewQuiz = () => {
+  const toggleNewQuiz = () => {
     console.log("Add new quiz functionality goes here");
+    setShowAddQuiz(true);
   };
 
   const selectQuiz = (index) => {
@@ -77,19 +110,25 @@ export default function Quizs() {
             </Animated.View>
           )}
           <QuizStatusbar
-            quiz={QUIZ_LIST.questions}
+            quiz={quizzes}
             quizIndex={quizIndex}
             moveToPreviousQuiz={moveToPreviousQuiz}
             moveToNextQuiz={moveToNextQuiz}
             onSelectQuiz={selectQuiz}
           />
           <QuizLists
-            quiz={QUIZ_LIST.questions[quizIndex]}
+            quiz={quizzes[quizIndex] || {}}
             updateQuiz={moveToNextQuiz}
           />
-          <TouchableOpacity onPress={addNewQuiz} style={styles.button}>
+
+          <TouchableOpacity onPress={toggleNewQuiz} style={styles.button}>
             <FontAwesome5 name="plus" size={24} color="white" />
           </TouchableOpacity>
+          <AddQuiz
+            visible={showAddQuiz}
+            onClose={() => setShowAddQuiz(false)}
+            onAdd={addNewQuiz}
+          />
         </View>
       </PanGestureHandler>
     </GestureHandlerRootView>
