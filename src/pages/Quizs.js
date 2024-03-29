@@ -48,6 +48,10 @@ export default function Quizs() {
     console.log("Add new quiz functionality goes here");
   };
 
+  const selectQuiz = (index) => {
+    setQuizIndex(index);
+  };
+
   function onSwipe({ nativeEvent }) {
     if (nativeEvent.state === State.END) {
       if (nativeEvent.translationX > 30) {
@@ -73,11 +77,11 @@ export default function Quizs() {
             </Animated.View>
           )}
           <QuizStatusbar
+            quiz={QUIZ_LIST.questions}
             quizIndex={quizIndex}
-            quizTotal={QUIZ_LIST.questions.length}
             moveToPreviousQuiz={moveToPreviousQuiz}
             moveToNextQuiz={moveToNextQuiz}
-            quizTitle={QUIZ_LIST.questions[quizIndex].title}
+            onSelectQuiz={selectQuiz}
           />
           <QuizLists
             quiz={QUIZ_LIST.questions[quizIndex]}
@@ -122,7 +126,7 @@ const styles = StyleSheet.create({
   },
   swipeIndicators: {
     position: "absolute",
-    top: "50%",
+    top: "40%",
     left: "40%",
     transform: [{ translateX: -50 }, { translateY: -50 }],
     padding: 10,
