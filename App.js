@@ -5,7 +5,7 @@ import { FontAwesome, MaterialIcons } from "@expo/vector-icons";
 
 import Welcome from "./src/pages/Welcome";
 import Timer from "./src/pages/Timer";
-import Quizs from "./src/pages/Quizs";
+import Quizzes from "./src/pages/Quizzes";
 
 const Tab = createBottomTabNavigator();
 
@@ -37,7 +37,7 @@ export default function App() {
           />
           <Tab.Screen
             name="Quiz"
-            component={Quizs}
+            component={Quizzes}
             options={{
               headerShown: false,
               tabBarIcon: ({ color, size }) => (
