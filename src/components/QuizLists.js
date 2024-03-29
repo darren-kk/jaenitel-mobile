@@ -19,7 +19,7 @@ function QuizLists({ quiz, updateQuiz }) {
   });
 
   function validateUserAnswer() {
-    if (checkAnswer(userInput, quiz.answwer)) {
+    if (checkAnswer(userInput, quiz.answer)) {
       updateQuiz();
 
       return;
