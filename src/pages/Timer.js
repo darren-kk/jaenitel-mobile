@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import Time from "../components/Time";
 import Quiz from "../components/Quiz";
 import { TIME_MINUTES } from "../utils/constants";
-import QUIZ_LIST from "../../assets/quiz.json";
 import getRandomIndex from "../utils/generateRandomIndex";
 
 export default function Timer() {
@@ -12,8 +12,22 @@ export default function Timer() {
   const [timerId, setTimerId] = useState(null);
   const [mode, setMode] = useState("pomodoro");
   const [showQuiz, setShowQuiz] = useState(false);
-  const randomIndex = getRandomIndex(QUIZ_LIST.questions.length - 1);
-  const quiz = QUIZ_LIST.questions[randomIndex];
+  const [quizzes, setQuizzes] = useState([]);
+  const randomIndex = getRandomIndex(quizzes.length - 1);
+
+  useEffect(() => {
+    const loadQuizzes = async () => {
+      try {
+        const quizzesStr = await AsyncStorage.getItem("quizzes");
+        const loadedQuizzes = quizzesStr ? JSON.parse(quizzesStr) : [];
+        setQuizzes(loadedQuizzes);
+      } catch (error) {
+        console.error("Failed to load quizzes", error);
+      }
+    };
+
+    loadQuizzes();
+  }, []);
 
   function startTimer() {
     if (!timerId) {
@@ -124,7 +138,7 @@ export default function Timer() {
           showQuiz={showQuiz}
           setShowQuiz={setShowQuiz}
           setMode={handleModeChange}
-          quiz={quiz}
+          quiz={quizzes[randomIndex]}
         />
       )}
     </View>

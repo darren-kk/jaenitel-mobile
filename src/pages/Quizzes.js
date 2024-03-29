@@ -29,7 +29,6 @@ export default function Quizs() {
     const loadQuizzes = async () => {
       try {
         const quizzesStr = await AsyncStorage.getItem("quizzes");
-        console.log(quizzesStr, "!@#!@$!@$!@$!@");
         const loadedQuizzes = quizzesStr ? JSON.parse(quizzesStr) : [];
         setQuizzes(loadedQuizzes);
         if (loadedQuizzes.length > 0 && quizIndex >= loadedQuizzes.length) {

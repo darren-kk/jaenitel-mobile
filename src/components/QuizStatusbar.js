@@ -11,7 +11,7 @@ function QuizStatusbar({
 }) {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [value, setValue] = useState(quizIndex);
-  const items = quiz.map((item, index) => ({
+  const items = quiz?.map((item, index) => ({
     label: `${index + 1}. ${item.title}`,
     value: index,
   }));
@@ -31,7 +31,7 @@ function QuizStatusbar({
           style={styles.buttonText}
         >
           <Text style={styles.buttonText}>
-            {quiz[quizIndex].title} ({quizIndex + 1}/{quiz.length})
+            {quiz[quizIndex]?.title} ({quizIndex + 1}/{quiz.length})
           </Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={moveToNextQuiz} style={styles.button}>

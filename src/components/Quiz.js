@@ -9,7 +9,7 @@ function Quiz({ showQuiz, setShowQuiz, setMode, quiz }) {
   const [userInput, setUserInput] = useState("");
   const [showWebView, setShowWebView] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const options = quiz.options.map((item, index) => {
+  const options = quiz?.options.map((item, index) => {
     return {
       id: index,
       text: item,
@@ -46,7 +46,7 @@ function Quiz({ showQuiz, setShowQuiz, setMode, quiz }) {
         {!showWebView ? (
           <View style={styles.centeredView}>
             <View style={styles.modalView}>
-              <Text style={styles.questionText}>Q. {quiz.question}</Text>
+              <Text style={styles.questionText}>Q. {quiz?.question}</Text>
               <BouncyCheckboxGroup
                 data={options}
                 onChange={(selectedItem) => {
