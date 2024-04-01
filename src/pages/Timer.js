@@ -1,6 +1,8 @@
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as Notifications from "expo-notifications";
+import { AppState } from "react-native";
 
 import Time from "../components/Time";
 import Quiz from "../components/Quiz";
@@ -13,7 +15,51 @@ export default function Timer() {
   const [mode, setMode] = useState("pomodoro");
   const [showQuiz, setShowQuiz] = useState(false);
   const [quizzes, setQuizzes] = useState([]);
+  const [backgroundTime, setBackgroundTime] = useState(null);
   const randomIndex = getRandomIndex(quizzes.length - 1);
+
+  async function registerForPushNotificationsAsync() {
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== "granted") {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== "granted") {
+      alert("Failed to get push token for push notification!");
+      return;
+    }
+
+    const token = (
+      await Notifications.getExpoPushTokenAsync({
+        projectId: "myExpoApp",
+      })
+    ).data;
+  }
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener("change", (nextAppState) => {
+      if (nextAppState === "active") {
+        if (backgroundTime) {
+          const currentTime = Date.now();
+          const timeDifference =
+            Math.floor((currentTime - backgroundTime - 1000) / 1000) * 1000;
+          setTimerCount((prev) => Math.max(0, prev - timeDifference));
+        }
+      } else if (nextAppState === "background") {
+        setBackgroundTime(Date.now());
+      }
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, [backgroundTime]);
+
+  useEffect(() => {
+    registerForPushNotificationsAsync();
+  }, []);
 
   useEffect(() => {
     const loadQuizzes = async () => {
@@ -29,17 +75,46 @@ export default function Timer() {
     loadQuizzes();
   }, []);
 
-  function startTimer() {
+  async function scheduleTimerEndNotification() {
+    const identifier = await Notifications.scheduleNotificationAsync({
+      content: {
+        title: "뽀모도로 완료!",
+        body: "집중 시간이 완료되었습니다. 퀴즈를 풀고 휴식에 돌입하세요!",
+      },
+      trigger: { seconds: timerCount / 1000 },
+    });
+    return identifier;
+  }
+
+  async function startTimer() {
     if (!timerId) {
-      const id = setInterval(() => setTimerCount((prev) => prev - 1000), 1000);
+      const notificationId = await scheduleTimerEndNotification();
+
+      const id = setInterval(() => {
+        setTimerCount((prev) => {
+          if (prev - 1000 <= 0) {
+            clearInterval(id);
+            setTimerId(null);
+
+            if (mode === "pomodoro") {
+              setShowQuiz(true);
+            }
+
+            return TIME_MINUTES[mode];
+          }
+          return prev - 1000;
+        });
+      }, 1000);
       setTimerId(id);
     }
   }
 
-  function stopTimer() {
+  async function stopTimer() {
+    const notificationId = await scheduleTimerEndNotification();
     if (timerId) {
       clearInterval(timerId);
       setTimerId(null);
+      Notifications.cancelScheduledNotificationAsync(notificationId);
     }
   }
 
@@ -130,9 +205,6 @@ export default function Timer() {
           />
         </TouchableOpacity>
       </View>
-      <TouchableOpacity style={styles.button} onPress={() => setShowQuiz(true)}>
-        <Text style={[styles.buttonText, { color: colorByMode }]}>퀴즈뿅</Text>
-      </TouchableOpacity>
       {showQuiz && (
         <Quiz
           showQuiz={showQuiz}
