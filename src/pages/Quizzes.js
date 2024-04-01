@@ -14,9 +14,10 @@ import {
 import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import QuizLists from "../components/QuizLists";
+import QuizView from "../components/QuizView";
 import QuizStatusbar from "../components/QuizStatusbar";
 import AddQuiz from "../components/AddQuiz";
+import checkAnswer from "../utils/checkAnswer";
 
 export default function Quizs() {
   const [quizzes, setQuizzes] = useState([]);
@@ -94,6 +95,14 @@ export default function Quizs() {
     }
   }
 
+  function validateUserAnswer(userInput) {
+    if (checkAnswer(userInput, quizzes[quizIndex].answer)) {
+      moveToNextQuiz();
+
+      return;
+    }
+  }
+
   return (
     <GestureHandlerRootView style={styles.container}>
       <PanGestureHandler onHandlerStateChange={onSwipe}>
@@ -115,11 +124,10 @@ export default function Quizs() {
             moveToNextQuiz={moveToNextQuiz}
             onSelectQuiz={selectQuiz}
           />
-          <QuizLists
+          <QuizView
             quiz={quizzes[quizIndex] || {}}
-            updateQuiz={moveToNextQuiz}
+            onSubmit={validateUserAnswer}
           />
-
           <TouchableOpacity onPress={toggleNewQuiz} style={styles.button}>
             <FontAwesome5 name="plus" size={24} color="white" />
           </TouchableOpacity>

@@ -1,27 +1,15 @@
 import { StyleSheet, Text, View, TouchableOpacity, Modal } from "react-native";
 import { useState } from "react";
-import BouncyCheckboxGroup from "react-native-bouncy-checkbox-group";
 import ResearchWebView from "./ResearchWebView";
+import QuizView from "./QuizView";
 
 import checkAnswer from "../utils/checkAnswer";
 
 function Quiz({ showQuiz, setShowQuiz, setMode, quiz }) {
-  const [userInput, setUserInput] = useState("");
   const [showWebView, setShowWebView] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const options = quiz?.options.map((item, index) => {
-    return {
-      id: index,
-      text: item,
-      style: styles.optionText,
-      textStyle: {
-        textDecorationLine: "none",
-        width: "auto",
-      },
-    };
-  });
 
-  function validateUserAnswer() {
+  function validateUserAnswer(userInput) {
     if (checkAnswer(userInput, quiz.answer)) {
       setShowQuiz(!showQuiz);
       setMode("shortBreak");
@@ -45,27 +33,11 @@ function Quiz({ showQuiz, setShowQuiz, setMode, quiz }) {
       >
         {!showWebView ? (
           <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text style={styles.questionText}>Q. {quiz?.question}</Text>
-              <BouncyCheckboxGroup
-                data={options}
-                onChange={(selectedItem) => {
-                  if (selectedItem) {
-                    setUserInput(selectedItem.text);
-                  }
-                }}
-                style={{
-                  flexDirection: "column",
-                  width: "100%",
-                }}
-              />
-              <TouchableOpacity
-                style={styles.button}
-                onPress={validateUserAnswer}
-              >
-                <Text style={styles.buttonText}>제출하기!</Text>
-              </TouchableOpacity>
-            </View>
+            <QuizView
+              quiz={quiz}
+              onSubmit={validateUserAnswer}
+              containerStyle={styles.modalView}
+            />
           </View>
         ) : (
           <ResearchWebView

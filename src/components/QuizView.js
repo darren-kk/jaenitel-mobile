@@ -1,10 +1,8 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { useState } from "react";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import BouncyCheckboxGroup from "react-native-bouncy-checkbox-group";
 
-import checkAnswer from "../utils/checkAnswer";
-
-function QuizLists({ quiz, updateQuiz }) {
+function QuizView({ quiz, onSubmit, containerStyle }) {
   const [userInput, setUserInput] = useState("");
   const options = quiz?.options?.map((item, index) => {
     return {
@@ -18,19 +16,11 @@ function QuizLists({ quiz, updateQuiz }) {
     };
   });
 
-  function validateUserAnswer() {
-    if (checkAnswer(userInput, quiz.answer)) {
-      updateQuiz();
-
-      return;
-    }
-  }
-
   return (
-    <View style={styles.container}>
-      <Text style={styles.questionText}>Q. {quiz.question}</Text>
+    <View style={[styles.container, containerStyle]}>
+      <Text style={styles.questionText}>Q. {quiz?.question}</Text>
       <BouncyCheckboxGroup
-        key={quiz.title}
+        key={quiz?.question}
         data={options}
         onChange={(selectedItem) => {
           if (selectedItem) {
@@ -42,7 +32,10 @@ function QuizLists({ quiz, updateQuiz }) {
           width: "100%",
         }}
       />
-      <TouchableOpacity style={styles.button} onPress={validateUserAnswer}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => onSubmit(userInput)}
+      >
         <Text style={styles.buttonText}>제출하기!</Text>
       </TouchableOpacity>
     </View>
@@ -104,4 +97,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default QuizLists;
+export default QuizView;

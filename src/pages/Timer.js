@@ -213,6 +213,9 @@ export default function Timer() {
           quiz={quizzes[randomIndex]}
         />
       )}
+      <TouchableOpacity style={styles.button} onPress={() => setShowQuiz(true)}>
+        <Text style={styles.buttonText}>제출하기!</Text>
+      </TouchableOpacity>
     </View>
   );
 }
