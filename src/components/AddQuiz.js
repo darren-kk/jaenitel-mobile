@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import { FontAwesome5 } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 function AddQuiz({ visible, onClose, onAdd }) {
   const [title, setTitle] = useState("");

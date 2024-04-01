@@ -5,7 +5,9 @@ import * as Notifications from "expo-notifications";
 import { AppState } from "react-native";
 
 import Time from "../components/Time";
-import Quiz from "../components/Quiz";
+import Quiz from "../components/QuizModal";
+import ModeButton from "../components/ModeButton";
+import ControlButton from "../components/ControlButton";
 import { TIME_MINUTES } from "../utils/constants";
 import getRandomIndex from "../utils/generateRandomIndex";
 
@@ -148,62 +150,19 @@ export default function Timer() {
         ]}
       >
         <View style={styles.menuContainer}>
-          <TouchableOpacity
-            style={[
-              styles.menuButton,
-              mode === "pomodoro" && styles.activeButton,
-            ]}
-            onPress={() => handleModeChange("pomodoro")}
-          >
-            <Text style={[styles.menuText, { color: colorByMode }]}>
-              뽀모도로
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.menuButton,
-              mode === "shortBreak" && styles.activeButton,
-            ]}
-            onPress={() => handleModeChange("shortBreak")}
-          >
-            <Text style={[styles.menuText, { color: colorByMode }]}>
-              짧은 휴식
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[
-              styles.menuButton,
-              mode === "longBreak" && styles.activeButton,
-            ]}
-            onPress={() => handleModeChange("longBreak")}
-          >
-            <Text style={[styles.menuText, { color: colorByMode }]}>
-              긴 휴식
-            </Text>
-          </TouchableOpacity>
+          <ModeButton mode={mode} setMode={setMode} label={"pomodoro"} />
+          <ModeButton mode={mode} setMode={setMode} label={"shortBreak"} />
+          <ModeButton mode={mode} setMode={setMode} label={"longBreak"} />
         </View>
         <Time minutes={minutes} seconds={seconds}></Time>
       </View>
       <View style={styles.buttonContainer}>
-        {!timerId ? (
-          <TouchableOpacity style={styles.button} onPress={startTimer}>
-            <Text style={[styles.buttonText, { color: colorByMode }]}>
-              집중 시작!
-            </Text>
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity style={styles.button} onPress={stopTimer}>
-            <Text style={[styles.buttonText, { color: colorByMode }]}>
-              일시정지
-            </Text>
-          </TouchableOpacity>
-        )}
-        <TouchableOpacity onPress={resetTimer}>
-          <Image
-            style={styles.resetIcon}
-            source={require("../../assets/reset.png")}
-          />
-        </TouchableOpacity>
+        <ControlButton
+          onPress={timerId ? stopTimer : startTimer}
+          onPressReset={resetTimer}
+          label={timerId ? "일시 정지" : "집중 시작"}
+          colorByMode={colorByMode}
+        />
       </View>
       {showQuiz && (
         <Quiz
@@ -213,9 +172,6 @@ export default function Timer() {
           quiz={quizzes[randomIndex]}
         />
       )}
-      <TouchableOpacity style={styles.button} onPress={() => setShowQuiz(true)}>
-        <Text style={styles.buttonText}>제출하기!</Text>
-      </TouchableOpacity>
     </View>
   );
 }
@@ -243,62 +199,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-evenly",
     width: "100%",
   },
-  menuButton: {
-    width: "auto",
-    height: 25,
-    paddingHorizontal: 10,
-    paddingVertical: 3,
-    backgroundColor: "#fff",
-    borderColor: "#fff",
-    borderRadius: 8,
-    borderWidth: 1,
-    alignContent: "center",
-    justifyContent: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 4.65,
-    elevation: 8,
-  },
-  menuText: {
-    fontSize: 17,
-    fontWeight: "900",
-    textAlign: "center",
-  },
   buttonContainer: {
     flexDirection: "row",
-  },
-  button: {
-    width: 200,
-    height: 70,
-    backgroundColor: "#fff",
-    borderColor: "#fff",
-    borderRadius: 8,
-    borderWidth: 1,
-    alignContent: "center",
-    justifyContent: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 4.65,
-    elevation: 8,
-  },
-  buttonText: {
-    fontSize: 24,
-    fontWeight: "900",
-    textAlign: "center",
-  },
-  resetIcon: {
-    position: "absolute",
-    width: 50,
-    height: 50,
-    marginLeft: 15,
-    marginTop: 10,
   },
 });

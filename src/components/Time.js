@@ -1,4 +1,3 @@
-import React from "react";
 import { Text, View, Platform } from "react-native";
 
 const Time = ({ minutes, seconds }) => {
